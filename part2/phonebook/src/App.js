@@ -1,57 +1,11 @@
-import React, { useState } from "react";
+import React, {useState } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import DisplayPersons from "./components/DisplayPersons";
 
 
-const FilteredList = ({filtered}) =>{
-  
-  return (
-    <ul>
-      {filtered.map(p => <li key={p.id}>{p.name} {p.number}</li>)}
-    </ul>
-  );
-}
 
-const AllPersons = ({persons}) =>{
-  return (
-    <ul>
-      {persons.map(p => <li key={p.id}>{p.name} {p.number}</li>)}
-    </ul>
-);
-}
 
-const Filter = (props) =>{
-  console.log("Props in Filter: ", props)
-  return(
-    <div>
-     filter shown with <input value={props.value} onChange={props.handler} />
-    </div>
-  )
-}
-
-const PersonForm = (props) => {
-  console.log("Props in PersonForm", props)
-  return(
-    <div>
-      <h2>add a new</h2>
-      <form onSubmit={props.onSubmit}>
-        name: <input value={props.name} onChange={props.nameHandler} /> <br></br>
-        number: <input value={props.number} onChange={props.numberHandler} /> <br></br>
-        <button type="submit">add</button>
-      </form>
-    </div>
-  )
-
-}
-
-const DisplayPersons = ({persons, filtered}) =>{
-    const display = filtered.size === 0 ?
-      persons.map(p => <li key={p.id}>{p.name} {p.number}</li>)
-      : filtered.map(p => <li key={p.id}>{p.name} {p.number}</li>)
-  return(
-    <div>
-      {display}
-    </div>
-  )
-}
 
 const App = () => {
   const [persons, setPerson] = useState([
@@ -59,7 +13,7 @@ const App = () => {
   ]);
   const [newName, setNewName] = useState('');
   const [number, setNumber] = useState('');
-  const [filtered, setFiltered] = useState(persons);
+  const [searched, setSearched] = useState(persons);
   const [filterInput, setFilterInput] = useState("");
 
   const addName = (event) => {
@@ -75,9 +29,7 @@ const App = () => {
       ? alert(`${newName} is already in book`)
       : setPerson(persons.concat(person));
     setNewName('');
-    setNumber("");
-    
-  
+    setNumber(""); 
   };
 
   const nameChange = (event) => {
@@ -95,12 +47,10 @@ const App = () => {
      : persons.filter(person => person.name.toLowerCase().startsWith(event.target.value.toLowerCase()))
 
     console.log("filteredList", filteredList);
-    setFiltered(filteredList);
+    setSearched(filteredList);
   };
 
   
- 
-  //{filterInput.length === 0 ? personList :  filtered.map(p => <li key={p.id}>{p.name} {p.number}</li>)}
 
   return (
     <div>
@@ -108,7 +58,7 @@ const App = () => {
       <Filter value={filterInput} handler={filterChange} />
       <PersonForm onSubmit={addName} name={newName} number={number} nameHandler={nameChange} numberHandler ={numberChange} />      
       <h2>Numbers</h2>
-      <DisplayPersons all={persons} filtered ={filtered} />
+      <DisplayPersons all={persons} filtered ={searched} filterInput={filterInput} />
       
     </div>
   );
