@@ -5,15 +5,18 @@ import Total from './Total'
 
 
 
-const Course = ({course}) =>{
-   console.log({course})
-    return( 
-   <div>
-        <Header header = {course.name} />
-        <Content parts = {course.parts} />
-        <Total parts = {course.parts} />
-        
-    </div> 
+const Course = ({course}) => {
+    console.log("Props in Course", course)
+    return (
+    <div>
+       {course.map(c =>
+       <div key={c.id}> 
+        <Header header = {c.name} />
+        <Content parts = {c.parts} />
+        <Total parts = {c.parts} />
+        </div>
+        )}
+        </div>
     )
 }
 
