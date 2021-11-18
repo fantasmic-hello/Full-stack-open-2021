@@ -1,33 +1,86 @@
 import React, { useState } from "react";
 
+
+const FilteredList = ({filtered}) =>{
+  
+  return (
+    <ul>
+      {filtered.map(p => <li key={p.id}>{p.name} {p.number}</li>)}
+    </ul>
+  );
+}
+
+const AllPersons = ({persons}) =>{
+  return (
+    <ul>
+      {persons.map(p => <li key={p.id}>{p.name} {p.number}</li>)}
+    </ul>
+);
+}
+
+const Filter = (props) =>{
+  console.log("Props in Filter: ", props)
+  return(
+    <div>
+     filter shown with <input value={props.value} onChange={props.handler} />
+    </div>
+  )
+}
+
+const PersonForm = (props) => {
+  console.log("Props in PersonForm", props)
+  return(
+    <div>
+      <h2>add a new</h2>
+      <form onSubmit={props.onSubmit}>
+        name: <input value={props.name} onChange={props.nameHandler} /> <br></br>
+        number: <input value={props.number} onChange={props.numberHandler} /> <br></br>
+        <button type="submit">add</button>
+      </form>
+    </div>
+  )
+
+}
+
+const DisplayPersons = ({persons, filtered}) =>{
+    const display = filtered.size === 0 ?
+      persons.map(p => <li key={p.id}>{p.name} {p.number}</li>)
+      : filtered.map(p => <li key={p.id}>{p.name} {p.number}</li>)
+  return(
+    <div>
+      {display}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPerson] = useState([
     { name: "Kalle", id: 1, number: "32382912" },
   ]);
-  const [newName, setNewName] = useState("");
-  const [number, setNumber] = useState("");
+  const [newName, setNewName] = useState('');
+  const [number, setNumber] = useState('');
   const [filtered, setFiltered] = useState(persons);
   const [filterInput, setFilterInput] = useState("");
 
   const addName = (event) => {
     event.preventDefault();
+    setFilterInput('')
     console.log("Event target in addName", newName);
     const person = {
       name: newName,
       id: persons.length + 1,
       number: number,
     };
-
-    persons.includes(persons.find((person) => person.name === newName))
+    persons.includes(persons.find((p) => p.name === newName))
       ? alert(`${newName} is already in book`)
       : setPerson(persons.concat(person));
-    setNewName("");
+    setNewName('');
     setNumber("");
+    
   
   };
 
   const nameChange = (event) => {
-    console.log("Event target", event.target.value);
     setNewName(event.target.value);
   };
 
@@ -45,25 +98,17 @@ const App = () => {
     setFiltered(filteredList);
   };
 
-  const personList = persons.map((p) => (
-    <li key={p.id}>
-      {p.name} {p.number}
-    </li>
-  ));
+  
  
+  //{filterInput.length === 0 ? personList :  filtered.map(p => <li key={p.id}>{p.name} {p.number}</li>)}
 
   return (
     <div>
       <h1>Phonebook</h1>
-      filter shown with <input value={filterInput} onChange={filterChange} />
-      <form onSubmit={addName}>
-        name: <input value={newName} onChange={nameChange} /> <br></br>
-        number: <input value={number} onChange={numberChange} /> <br></br>
-        <button type="submit">add</button>
-      </form>
+      <Filter value={filterInput} handler={filterChange} />
+      <PersonForm onSubmit={addName} name={newName} number={number} nameHandler={nameChange} numberHandler ={numberChange} />      
       <h2>Numbers</h2>
-      {filterInput.length === 0 ? personList :  filtered.map(p => <li key={p.id}>{p.name} {p.number}</li>)}
-      
+      <DisplayPersons all={persons} filtered ={filtered} />
       
     </div>
   );
