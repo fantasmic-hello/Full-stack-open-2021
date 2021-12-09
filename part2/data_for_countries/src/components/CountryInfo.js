@@ -2,7 +2,7 @@ import React from "react";
 
 const FullCountry = ({country}) =>{
     
-    console.log("Full", country)
+
    
     return(
     <div>
