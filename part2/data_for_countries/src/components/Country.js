@@ -1,50 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
+import FullCountry from "./CountryInfo";
 
+const DisplayCountry = ({ countries }) => {
+  const [searchTerm, setSearchTerm] = useState("");
 
-const FullCountry = ({country}) =>{
-    
-    console.log("Full", country)
-    
-    return(
-    <div>
-        <h1>{country.name}</h1>
-        <p>capitol {country.capital}</p>
-        <p>population {country.population}</p>
-        <h2>languages</h2>
-       <ul>
-            {country.languages.map(lang =>
-                <li>{lang.name}</li> )}
-        </ul>
-        <img src={country.flag} width='200' height='200'></img> 
-    </div>
-    )
-}
+  const countriesToShow = countries.filter((country) =>
+    country.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
+  const buttonClick = (country) => {
+    setSearchTerm(country.name);
 
-const DisplayCountry = ({countries, searchTerm}) =>{
+  };
 
-    const countriesToShow = countries.filter( country =>
-        country.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    
-    
-    if(countriesToShow.length > 10){
-        return (<p>Too many countries</p>)
-    } else if(countriesToShow.length === 1){
-        return ( <div>
-            <FullCountry country={countriesToShow[0]}></FullCountry>
-        </div>)
-    }
-    
-    else{
-    
-    return(
-        <div>
-            {countriesToShow.map(country => <p key={country.numericCode}>{country.name}</p>)}
-        </div>
-    )
-}
-        
-}
+  if (countriesToShow.length > 10) {
+    return (
+      <div>
+        <label>find countries</label>
+        <input
+          type="text"
+          onChange={(event) => setSearchTerm(event.target.value)}
+        ></input>
+        {searchTerm == "" ? "" : "Too many countries"}
+      </div>
+    );
+  } else if (countriesToShow.length === 1) {
+    return (
+      <div>
+        <label>find countries</label>
+        <input
+          type="text"
+          onChange={(event) => setSearchTerm(event.target.value)}
+        ></input>
+        <FullCountry country={countriesToShow[0]}></FullCountry>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <label>find countries</label>
+        <input
+          type="text"
+          onChange={(event) => setSearchTerm(event.target.value)}
+        ></input>
+        {countriesToShow.map((country) => (
+          <div>
+            <p key={country.numericCode}>{country.name}</p>
+            <button onClick={() => buttonClick(country)}>show</button>
+          </div>
+        ))}
+      </div>
+    );
+  }
+};
 
 export default DisplayCountry;
