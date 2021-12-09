@@ -1,6 +1,26 @@
 import React from "react";
 
 
+const FullCountry = ({country}) =>{
+    
+    console.log("Full", country)
+    
+    return(
+    <div>
+        <h1>{country.name}</h1>
+        <p>capitol {country.capital}</p>
+        <p>population {country.population}</p>
+        <h2>languages</h2>
+       <ul>
+            {country.languages.map(lang =>
+                <li>{lang.name}</li> )}
+        </ul>
+        <img src={country.flag} width='200' height='200'></img> 
+    </div>
+    )
+}
+
+
 const DisplayCountry = ({countries, searchTerm}) =>{
 
     const countriesToShow = countries.filter( country =>
@@ -10,7 +30,13 @@ const DisplayCountry = ({countries, searchTerm}) =>{
     
     if(countriesToShow.length > 10){
         return (<p>Too many countries</p>)
-    } else{
+    } else if(countriesToShow.length === 1){
+        return ( <div>
+            <FullCountry country={countriesToShow[0]}></FullCountry>
+        </div>)
+    }
+    
+    else{
     
     return(
         <div>
