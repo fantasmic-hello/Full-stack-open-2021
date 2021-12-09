@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FullCountry from "./CountryInfo";
+import Weather from "./Weather";
 
 
 
@@ -9,7 +10,7 @@ const DisplayCountry = ({countries, searchTerm}) =>{
 
     const[countryList, setCountryList] = useState(countries);
 
-
+    
 
     useEffect(()=>{
         setCountryList(countries.filter(
@@ -36,6 +37,7 @@ const DisplayCountry = ({countries, searchTerm}) =>{
         
         return ( <div>
             <FullCountry country={countryList[0]}></FullCountry>
+            <Weather country={countryList[0]}></Weather>
         </div>)
     } 
     
