@@ -17,6 +17,7 @@ const App = () => {
 
 
 
+
   useEffect(() =>{
 
     console.log('Effect')
@@ -36,14 +37,25 @@ const App = () => {
     console.log("Event target in addName", newName);
     const person = {
       name: newName,
-      id: persons.length + 1,
+     // id: persons.length + 1,
       number: number,
     };
-    persons.includes(persons.find((p) => p.name === newName))
-      ? alert(`${newName} is already in book`)
-      : setPerson(persons.concat(person));
-    setNewName('');
-    setNumber(""); 
+
+    if(persons.includes(persons.find( (p) => p.name === newName))){
+      alert(`${person.name} is already in phonebook`)
+      setNewName('');
+    setNumber("");
+     return;
+    }
+
+     
+    axios.post('http://localhost:3001/persons', person)
+      .then( (response) =>{
+        setPerson(persons.concat(response.data))
+        setNewName('');
+        setNumber("");
+      } 
+      )
   };
 
   const nameChange = (event) => {
