@@ -10,8 +10,6 @@ const DisplayPersons = ({all, filtered, filterInput, buttonHandle}) =>{
     setPersonList(all)
   },[all])
 
-  console.log("all", all);
-  console.log("PersonList", personList)
   
 
      /* const display = filterInput.length === 0 ?

@@ -32,7 +32,8 @@ const App = () => {
       personService.getAll()
       .then( (initialPersons) => {
         setPerson(initialPersons);
-      })
+        console.log("InitialPersons", initialPersons);
+      })  
 
   }, [])
 
@@ -40,15 +41,16 @@ const App = () => {
   const addName = (event) => {
     event.preventDefault();
     setFilterInput('')
-    console.log("Event target in addName", newName);
+    
     const person = {
       name: newName,
      // id: persons.length + 1,
       number: number,
     };
 
-    if(persons.includes(persons.find( (p) => p.name === newName))){
-      alert(`${person.name} is already in phonebook`)
+    if(persons.includes(persons.find( (p) => p.name === newName ))){
+     const result = window.confirm(`${person.name} is already in phonebook, replace number?`)
+     updateNumber(result, person);
       setNewName('');
       setNumber("");
      return;
@@ -72,20 +74,34 @@ const App = () => {
 
   };
 
-  const deletePerson = (person) => {
-   
-    
+  const deletePerson = (person) => {  
     
     return () => {
     const result = window.confirm(`Are you sure you want to delete ${person.name}?`)
     if(result){
     personService.deletePerson(person)
-    .then(response => setPerson(persons.filter(p => p.id != person.id)))
+    .then(response => setPerson(persons.filter(p => p.id !== person.id)))
     }
   } 
-  
  
   };
+
+  const updateNumber = (result, person) =>{
+
+
+
+    if(result){
+  
+      const oldPerson = persons.find(n => n.name === person.name)
+      const newPerson = {...oldPerson, number: person.number}
+      console.log(newPerson)
+      personService.updatePerson(newPerson)
+      .then(response => { 
+        setPerson(persons.map( p => p.id !== response.id ? p : response))
+      })
+    }
+
+  }
 
   const nameChange = (event) => {
     setNewName(event.target.value);
