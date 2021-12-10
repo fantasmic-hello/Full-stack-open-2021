@@ -4,6 +4,7 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import DisplayPersons from "./components/DisplayPersons";
 import personService from "./services/PersonService";
+import Message from "./components/Message";
 
 
 
@@ -15,6 +16,7 @@ const App = () => {
   const [number, setNumber] = useState('');
   const [searched, setSearched] = useState(persons);
   const [filterInput, setFilterInput] = useState("");
+  const [message, setMessage] = useState();
 
 
 
@@ -53,6 +55,7 @@ const App = () => {
      updateNumber(result, person);
       setNewName('');
       setNumber("");
+     
      return;
     }
 
@@ -71,6 +74,13 @@ const App = () => {
         setNewName('');
         setNumber("");
       })
+      .then(() => {
+      setMessage(`${person.name} successfully added!`)
+      setTimeout(() =>{
+        setMessage(null)
+      }, 5000)
+       })
+       .catch(error => alert('Something wrong happened!'))
 
   };
 
@@ -98,6 +108,10 @@ const App = () => {
       personService.updatePerson(newPerson)
       .then(response => { 
         setPerson(persons.map( p => p.id !== response.id ? p : response))
+      })
+      .catch(error => {
+        alert("Failed")
+        setPerson(persons.filter(p => p.id !== newPerson.id))
       })
     }
 
@@ -128,6 +142,7 @@ const App = () => {
       <h1>Phonebook</h1>
       <Filter value={filterInput} handler={filterChange} />
       <PersonForm onSubmit={addName} name={newName} number={number} nameHandler={nameChange} numberHandler ={numberChange} />      
+      <Message message={message}></Message>
       <h2>Numbers</h2>
       <DisplayPersons all={persons} filtered ={searched} filterInput={filterInput} buttonHandle={deletePerson} />
       
