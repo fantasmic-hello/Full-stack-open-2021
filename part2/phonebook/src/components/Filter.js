@@ -1,7 +1,7 @@
 import React from "react";
 
 
-
+//Completeley useless
 const Filter = (props) =>{
     console.log("Props in Filter: ", props)
     return(

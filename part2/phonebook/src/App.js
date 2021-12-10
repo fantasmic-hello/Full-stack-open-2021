@@ -72,6 +72,21 @@ const App = () => {
 
   };
 
+  const deletePerson = (person) => {
+   
+    
+    
+    return () => {
+    const result = window.confirm(`Are you sure you want to delete ${person.name}?`)
+    if(result){
+    personService.deletePerson(person)
+    .then(response => setPerson(persons.filter(p => p.id != person.id)))
+    }
+  } 
+  
+ 
+  };
+
   const nameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -82,12 +97,12 @@ const App = () => {
 
   const filterChange = (event) => {
     setFilterInput(event.target.value);
-    const filteredList = event.target.value.length === 0 
+   /* const filteredList = event.target.value.length === 0 
      ? persons
      : persons.filter(person => person.name.toLowerCase().startsWith(event.target.value.toLowerCase()))
 
     console.log("filteredList", filteredList);
-    setSearched(filteredList);
+    setSearched(filteredList); */
   };
 
   
@@ -98,7 +113,7 @@ const App = () => {
       <Filter value={filterInput} handler={filterChange} />
       <PersonForm onSubmit={addName} name={newName} number={number} nameHandler={nameChange} numberHandler ={numberChange} />      
       <h2>Numbers</h2>
-      <DisplayPersons all={persons} filtered ={searched} filterInput={filterInput} />
+      <DisplayPersons all={persons} filtered ={searched} filterInput={filterInput} buttonHandle={deletePerson} />
       
     </div>
   );
