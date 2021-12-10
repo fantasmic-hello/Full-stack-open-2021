@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import DisplayPersons from "./components/DisplayPersons";
+import personService from "./services/PersonService";
 
 
 
@@ -20,12 +21,17 @@ const App = () => {
 
   useEffect(() =>{
 
-    console.log('Effect')
+   /* console.log('Effect')
     axios
       .get('http://localhost:3001/persons')
       .then(response =>{
         console.log(response)
         setPerson(response.data)
+      }) */
+
+      personService.getAll()
+      .then( (initialPersons) => {
+        setPerson(initialPersons);
       })
 
   }, [])
@@ -44,18 +50,26 @@ const App = () => {
     if(persons.includes(persons.find( (p) => p.name === newName))){
       alert(`${person.name} is already in phonebook`)
       setNewName('');
-    setNumber("");
+      setNumber("");
      return;
     }
 
      
-    axios.post('http://localhost:3001/persons', person)
+    /*axios.post('http://localhost:3001/persons', person)
       .then( (response) =>{
         setPerson(persons.concat(response.data))
         setNewName('');
         setNumber("");
       } 
-      )
+      ) */
+
+      personService.create(person)
+      .then((response) => {
+        setPerson(persons.concat(response))
+        setNewName('');
+        setNumber("");
+      })
+
   };
 
   const nameChange = (event) => {
